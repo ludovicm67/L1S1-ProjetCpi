@@ -1,7 +1,7 @@
 #!/bin/sh
 
-DELETEARCHIVE=false   # Supprime l'archive une fois l'archive extraite (si=true)
-DESTNAME=""           # Répertoire de destination
+DELETEARCHIVE=false  # Si true = Supprime l'archive une fois l'archive extraite
+DESTNAME=""          # Répertoire de destination
 
 # Analyse des différentes options
 OPTS=`getopt --options hxd: --long help,delete-archive,dest: \
@@ -14,7 +14,9 @@ while true; do
         -h, --help     Display this message and exit\n \
         -x, --delete-archive\n \
                        Delete archives when extracted\n \
-        -d, --dest     Destination folder (extraction folder)\n\n";
+        -d=DIRECTORY, --dest=DIRECTORY\n \
+                       Destination directory will be DIRECTORY\n \
+                       (extraction directory)\n\n";
         exit 0;
         shift
       ;;
@@ -72,6 +74,7 @@ ls "$DIRECTORY" | grep " - [[:digit:]]* --- Jamendo - MP3\.zip$" | \
     # On supprime l'archive si l'option -x est passé
     if $DELETEARCHIVE; then
       rm -f "$DIRECTORY/$ARCHIVENAME"
+      echo "Deleted '$DIRECTORY/$ARCHIVENAME'."
     fi
 
   done
