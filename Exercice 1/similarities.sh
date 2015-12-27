@@ -14,6 +14,10 @@ while true; do
   esac
 done
 
+# On initialise un fichier temporaire que l'on utilisera pour
+# stocker les résultats
+RESULTS_TEMPSFILE="/tmp/similaritiesResults.$$"
+trap 'rm -f "$RESULTS_TEMPSFILE"' EXIT
 
 # On vérifie que l'on a bien deux fichiers passés en argument
 if [ $# -ne 2 ] || [ ! -f "$1" ] || [ ! -f "$2" ]; then
@@ -72,7 +76,7 @@ version_optimisee () {
     # On parcours le premier fichier ligne par ligne
     while read LINE; do
         # On regarde si la ligne est présente dans le second fichier
-        if [ `fgrep -cx "$LINE" "$FILE2_TMP"` -ne 0 ]; then
+        if [ `fgrep -cx -m1 "$LINE" "$FILE2_TMP"` -ne 0 ]; then
             SIMILARITIES="`echo "$SIMILARITIES"$'\n'"$LINE"`"
         fi
     done < "$FILE1_TMP"
@@ -80,7 +84,7 @@ version_optimisee () {
     # On va enlever les lignes vides (car la première est toujours vide)
     SIMILARITIES="`echo "$SIMILARITIES" | grep -v '^ *$'`"
 
-    echo "$SIMILARITIES"
+    echo "$SIMILARITIES" > "$RESULTS_TEMPSFILE"
 
 }
 
@@ -98,7 +102,7 @@ echo "$LINE_FOR_GRAPH" >> datas.txt
 # On affiche les lignes similaires trouvées si l'option -v est passé
 if $DISPLAY_SIMILARITIES; then
     echo "Voici les lignes similaires :"
-    version_optimisee
+    cat "$RESULTS_TEMPSFILE"
 fi
 
 # On trie le fichier datas.txt et on trace le graphe
