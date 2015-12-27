@@ -80,6 +80,8 @@ version_optimisee () {
     # On va enlever les lignes vides (car la première est toujours vide)
     SIMILARITIES="`echo "$SIMILARITIES" | grep -v '^ *$'`"
 
+    echo "$SIMILARITIES"
+
 }
 
 # On lance les deux fonctions, et on récupère le temps d'éxécution
@@ -96,7 +98,7 @@ echo "$LINE_FOR_GRAPH" >> datas.txt
 # On affiche les lignes similaires trouvées si l'option -v est passé
 if $DISPLAY_SIMILARITIES; then
     echo "Voici les lignes similaires :"
-    echo "$SIMILARITIES"
+    version_optimisee
 fi
 
 # On trie le fichier datas.txt et on trace le graphe
