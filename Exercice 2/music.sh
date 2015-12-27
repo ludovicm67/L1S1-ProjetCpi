@@ -5,7 +5,7 @@ DESTNAME=""          # Répertoire de destination
 
 # Analyse des différentes options
 OPTS=`getopt --options hxd: --long help,delete-archive,dest: \
-        -n "$MAKEFILE_SCRIPTNAME" -- "$@"`
+        -n "music" -- "$@"`
 eval set -- "$OPTS"
 while true; do
   case "$1" in
